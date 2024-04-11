@@ -1,0 +1,36 @@
+---
+title: "ECN 140 2-Pager"
+author: "Judah Hsu"
+date: "2023-11-03"
+output: html_document
+---
+#### 2 Pager
+```{r}
+library(tidyverse)
+data <- read.csv("/Users/judahhsu/Desktop/Classes/ECN 140/house-prices-advanced-regression-techniques/train.csv")
+data$SalePrice <- as.numeric(data$SalePrice)
+data$Neighborhood <- as.factor(data$Neighborhood)
+data$YrSold <- as.factor(data$YrSold)
+data %>% head()
+
+ggplot(data=data, aes(x=SalePrice, fill=YrSold)) +
+  geom_histogram(binwidth=10000, color='black') +
+  labs(x="Sale Price", y="frequency", title="Histogram of Sale Prices")
+
+ggplot(data=data, aes(y=SalePrice, x=X1stFlrSF)) +
+  geom_point() +
+  geom_smooth(method='lm', se=TRUE, color='blue') +
+  labs(x = "1st Floor in Square Feet", y ="Sale Price", title="Scatterplot of Price vs 1st Floor Area")
+
+ggplot(data=data, aes(y=SalePrice, x=YrSold)) +
+  geom_boxplot(fill='blue', color='black') +
+  #geom_smooth(method='lm', se=TRUE, color='blue') +
+  labs(x = "Year Sold", y ="Sale Price", title="Scatterplot of Price vs year sold")
+```
+
+```{r}
+#model1 <- lm(SalePrice ~ LotArea, data=data)
+#summary(model1)
+model2 <- lm(SalePrice ~ LotArea + WoodDeckSF + OpenPorchSF + EnclosedPorch +ScreenPorch + PoolArea, data=data)
+summary(model2)
+```
